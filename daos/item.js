@@ -1,20 +1,25 @@
-const mongoose = require('mongoose');
+import Item from '../models/item';
 
-const Item = require('../models/item');
+const create = async (name) => {
+  const item = await Item.create({ name });
 
-module.exports = {};
+  return item;
+};
 
-module.exports.create = async (name) => {
-    const item = await Item.create({ name });
-    return item;
-}
+const getAll = async () => {
+  const items = await Item.find().lean();
 
-module.exports.getAll = async () => {
-    const items = await Item.find().lean();
-    return items;
-}
+  return items;
+};
 
-module.exports.getById = async (itemId) => {
-    const item = await Item.findOne({ _id: itemId }).lean();
-    return item;
-}
+const getById = async (itemId) => {
+  const item = await Item.findOne({ _id: itemId }).lean();
+
+  return item;
+};
+
+export default {
+  create,
+  getAll,
+  getById,
+};

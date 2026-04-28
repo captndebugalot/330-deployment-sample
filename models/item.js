@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const itemSchema = new mongoose.Schema({
-  name: { type: String, required: true  },
+  name: { type: String, required: true },
 });
 
-
-module.exports = mongoose.model("items", itemSchema);
+export default mongoose.model('items', itemSchema);

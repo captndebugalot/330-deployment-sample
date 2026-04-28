@@ -1,11 +1,9 @@
-const request = require("supertest");
+import request from 'supertest';
+import server from '../server';
+import testUtils from '../test-utils';
+import Item from '../models/item';
 
-const server = require("../server");
-const testUtils = require('../test-utils');
-
-const Item = require('../models/item');
-
-describe("/items", () => {
+describe('/items', () => {
   beforeAll(testUtils.connectDB);
   afterAll(testUtils.stopDB);
 
@@ -20,9 +18,8 @@ describe("/items", () => {
     });
 
     it('should return all stored items', async () => {
-      const res = await request(server)
-        .get("/items")
-        .send();
+      const res = await request(server).get('/items').send();
+
       expect(res.statusCode).toEqual(200);
       expect(res.body).toMatchObject([item0, item1]);
     });
@@ -37,51 +34,51 @@ describe("/items", () => {
 
     it('should return item0', async () => {
       const res = await request(server)
-        .get("/items/" + savedItems[0]._id)
+        .get(`/items/${savedItems[0].id}`)
         .send();
+
       expect(res.statusCode).toEqual(200);
-      const expected = savedItems[0].toJSON();
-      expected._id = expected._id.toString();
-      expect(res.body).toMatchObject(expected);
+      const { _id: itemId, ...expected } = savedItems[0].toJSON();
+
+      expect(res.body).toMatchObject({ ...expected, _id: String(itemId) });
     });
 
     it('should return item1', async () => {
       const res = await request(server)
-        .get("/items/" + savedItems[1]._id)
+        .get(`/items/${savedItems[1].id}`)
         .send();
+
       expect(res.statusCode).toEqual(200);
-      const expected = savedItems[1].toJSON();
-      expected._id = expected._id.toString();
-      expect(res.body).toMatchObject(expected);
+      const { _id: itemId, ...expected } = savedItems[1].toJSON();
+
+      expect(res.body).toMatchObject({ ...expected, _id: String(itemId) });
     });
 
     it('should return 404 if no match', async () => {
-      await Item.deleteOne({ _id: savedItems[1]._id })
+      await Item.deleteOne({ _id: savedItems[1].id });
       const res = await request(server)
-        .get("/items/" + savedItems[1]._id)
+        .get(`/items/${savedItems[1].id}`)
         .send();
+
       expect(res.statusCode).toEqual(404);
     });
   });
 
   describe('POST /', () => {
     it('should create item0', async () => {
-      const res = await request(server)
-        .post("/items")
-        .send(item0);
+      const res = await request(server).post('/items').send(item0);
+
       expect(res.statusCode).toEqual(200);
-      const storedItem = await Item.findOne().lean()
+      const storedItem = await Item.findOne().lean();
       expect(storedItem).toMatchObject(item0);
     });
 
     it('should create item1', async () => {
-      const res = await request(server)
-        .post("/items")
-        .send(item1);
+      const res = await request(server).post('/items').send(item1);
+
       expect(res.statusCode).toEqual(200);
-      const storedItem = await Item.findOne().lean()
+      const storedItem = await Item.findOne().lean();
       expect(storedItem).toMatchObject(item1);
     });
   });
-
 });

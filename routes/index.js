@@ -1,15 +1,18 @@
-const { Router } = require("express");
-const router = Router();
+import express from 'express';
+import itemsRoutes from './items';
 
-router.use("/items", require('./items'));
-router.get("/", (req, res, next) => {
+const router = express.Router();
+
+router.use('/items', itemsRoutes);
+
+router.get('/', (req, res) => {
   res.send(`
     <html>
       <body>
         <h1> Hello, world! </h1>
       </body>
     </html>
-  `)
+  `);
 });
 
-module.exports = router;
+export default router;
