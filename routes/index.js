@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
     <html>
       <body>
         <h1> Hello, world! </h1>
+        <p> Version: 0.0.1 </p>
       </body>
     </html>
   `);
