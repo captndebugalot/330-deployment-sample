@@ -22,6 +22,7 @@ describe('/items', () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body).toMatchObject([item0, item1]);
+      expect(false).toBe(true)
     });
   });
 
